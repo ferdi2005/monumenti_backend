@@ -1,7 +1,6 @@
 class CredentialsController < ApplicationController
   def set
     user = User.new(uuid: params[:uuid], device_name: params[:device_name], token: params[:token])
-
     if user.save
       respond_to do |format|
         format.json { render :status => 202}
