@@ -5,5 +5,6 @@ Rails.application.routes.draw do
   get 'userinfo', to: "credentials#get"
   post "auth/mediawiki/callback", to: "authentication#mediawiki"
   get 'success', to: "authentication#success"
+  get 'auth/failure', to: "authentication#failure"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

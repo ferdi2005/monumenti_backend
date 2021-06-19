@@ -2,6 +2,10 @@ class AuthenticationController < ApplicationController
   def success
   end
 
+  def failure
+    redirect_to root_path
+  end
+
   def start
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       session[:user_id] = user.id
