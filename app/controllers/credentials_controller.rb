@@ -6,7 +6,22 @@ class CredentialsController < ApplicationController
         format.json { render :status => 202, :json => {id: user.id }}
       end
     else
-      format.json { render :status => 400, :json => {id: nil}}
+      respond_to do |format|
+        format.json { render :status => 400, :json => {id: nil}}
+      end
+    end
+  end
+
+  def get
+    user = User.find_by(uuid: params[:uuid], token: params[:token])
+    if user
+      respond_to do |format|
+        format.json { render :status => 200, :json => user }
+      end
+    else
+      respond_to do |format|
+        format.json { render :status => 404, :json => { error: "User not found."} }
+      end
     end
   end
 end
