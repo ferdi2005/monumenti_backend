@@ -20,7 +20,7 @@ class CredentialsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.json { render :status => 404, :json => { error: "User not found."} }
+        format.json { render :json => { error: "User not found."} }
       end
     end
   end
