@@ -24,9 +24,10 @@ class AuthenticationController < ApplicationController
     user = User.find(session[:user_id])
     if user
       hash = { oauth_token: session[:token], oauth_token_secret: session[:token_secret]}
-      request_token  = OAuth::RequestToken.from_hash($oauth_consumer, hash)
+      request_token = OAuth::RequestToken.from_hash($oauth_consumer, hash)
       access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
-      user.update!(authinfo: access_token, authorized: true)
+      authinfo = {token: access_token.token, secret: access_token.secret}
+      user.update!(authinfo: authinfo, authorized: true)
     else
       redirect_to root_path and return
     end
@@ -39,4 +40,3 @@ class AuthenticationController < ApplicationController
     request.env['omniauth.auth']
   end
 end
-
