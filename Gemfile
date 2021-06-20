@@ -57,10 +57,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem "omniauth", "~> 2.0", groups: [:development, :test]
-
-gem "omniauth-mediawiki", "~> 0.0.4"
-
-gem "omniauth-rails_csrf_protection", "~> 1.0"
-
 gem "mini_magick", "~> 4.11"
+
+gem "oauth", "~> 0.5.6"

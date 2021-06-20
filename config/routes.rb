@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get "start_login", to: 'authentication#start'
   post 'set_credentials', to: 'credentials#set'
   get 'userinfo', to: "credentials#get"
-  post "auth/mediawiki/callback", to: "authentication#mediawiki"
+  get "auth/mediawiki/callback", to: "authentication#mediawiki"
   get 'success', to: "authentication#success"
   get 'auth/failure', to: "authentication#failure"
   post 'photoupload', to: "photos#upload"
