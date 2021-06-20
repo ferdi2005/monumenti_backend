@@ -17,12 +17,11 @@ class PhotosController < ApplicationController
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       errors = []
       success = []
-      byebug
-      JSON.parse(params[:photos]).each do |key, photo|
+      JSON.parse(params[:photos]).each do |key, value|
         if (photo = Photo.find_by(id: key, user: user))
-          photo.update!(title: photo[0], description: photo[1], date: photo[3], confirmed: true)
+          photo.update!(title: value[0], description: value[1], date: value[2], confirmed: true)
           success.push(photo[0])
-          # TODO: Dare il via al job di caricamento
+          # TODO: Dare il via al job di caricamento effettivo
         else
           errors.push(photo[0])
         end
@@ -36,7 +35,7 @@ class PhotosController < ApplicationController
   def cancel
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
      
-      params[:ids].each do |id|
+      JSON.parse(params[:ids]).each do |id|
         if (photo = Photo.find_by(id: id, user: user))
           photo.destroy!
         end
