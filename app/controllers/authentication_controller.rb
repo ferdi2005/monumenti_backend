@@ -21,13 +21,12 @@ class AuthenticationController < ApplicationController
   end
 
   def mediawiki
-    byebug
     user = User.find(session[:user_id])
     if user
       hash = { oauth_token: session[:token], oauth_token_secret: session[:token_secret]}
       request_token  = OAuth::RequestToken.from_hash($oauth_consumer, hash)
       access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
-      user.update!(authinfo: access_token)
+      user.update!(authinfo: access_token, authorized: true)
     else
       redirect_to root_path and return
     end
