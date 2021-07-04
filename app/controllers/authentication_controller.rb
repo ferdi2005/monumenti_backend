@@ -1,42 +1,60 @@
 class AuthenticationController < ApplicationController
-  $oauth_consumer = OAuth::Consumer.new(ENV["CONSUMER_KEY"], ENV["CONSUMER_SECRET"], :site => "https://commons.wikimedia.org", :request_token_path => "/w/index.php?title=Special:OAuth/initiate", :authorize_path => "/wiki/Special:OAuth/authorize", :access_token_path => "/wiki/Special:OAuth/token",)
-
   def success
+    redirect_to root_path and return unless (@user = User.find(params[:user].to_i))
   end
 
   def failure
     redirect_to root_path
   end
 
+  def generate_url(oauth_consumer)
+    # Crea l'url per iniziare euna richiesta oauth
+    request_token = oauth_consumer.get_request_token(:oauth_callback => "oob")
+    session[:token] = request_token.token
+    session[:token_secret] = request_token.secret
+    return request_token.authorize_url(:oauth_callback => "oob")
+  end
+
   def start
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       session[:user_id] = user.id
-      request_token = $oauth_consumer.get_request_token(:oauth_callback => "oob")
-      session[:token] = request_token.token
-      session[:token_secret] = request_token.secret
-      redirect_to request_token.authorize_url(:oauth_callback => "oob")
+      @mediawiki_url = generate_url($oauth_consumer)
+      @test_url = generate_url($test_oauth_consumer)
     else
       redirect_to root_path and return
+    end
+  end
+
+  def process_data(oauth_consumer, user)
+    begin
+      hash = { oauth_token: session[:token], oauth_token_secret: session[:token_secret]}
+      request_token = OAuth::RequestToken.from_hash(oauth_consumer, hash)
+      access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
+      authinfo = {token: access_token.token, secret: access_token.secret}
+      user.update!(authinfo: authinfo, authorized: true)
+      GetUserInfoWorker.perform_async(user)
+      redirect_to success_path(user: user.id)
+    rescue
+      redirect_to root_path
     end
   end
 
   def mediawiki
     user = User.find(session[:user_id])
     if user
-      hash = { oauth_token: session[:token], oauth_token_secret: session[:token_secret]}
-      request_token = OAuth::RequestToken.from_hash($oauth_consumer, hash)
-      access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
-      authinfo = {token: access_token.token, secret: access_token.secret}
-      user.update!(authinfo: authinfo, authorized: true)
+      process_data($oauth_consumer, user)
     else
       redirect_to root_path and return
     end
-    redirect_to success_path
   end
 
-  protected
-
-  def auth_hash
-    request.env['omniauth.auth']
+  def testwiki
+    user = User.find(session[:user_id])
+    if user
+      user.update!(testuser: true)
+      process_data($test_oauth_consumer, user)
+    else
+      redirect_to root_path and return
+    end
   end
 end
