@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_04_232006) do
+ActiveRecord::Schema.define(version: 2021_07_06_011840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -54,6 +54,11 @@ ActiveRecord::Schema.define(version: 2021_07_04_232006) do
     t.string "title"
     t.text "description"
     t.date "date"
+    t.string "canonicaltitle"
+    t.string "descriptionurl"
+    t.string "url"
+    t.string "sha1"
+    t.boolean "uploaded"
     t.index ["user_id"], name: "index_photos_on_user_id"
   end
 
@@ -67,6 +72,7 @@ ActiveRecord::Schema.define(version: 2021_07_04_232006) do
     t.hstore "authinfo"
     t.boolean "testuser", default: false
     t.string "username"
+    t.boolean "ready", default: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

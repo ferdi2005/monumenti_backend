@@ -62,3 +62,7 @@ gem "mini_magick", "~> 4.11"
 gem "oauth", "~> 0.5.6"
 
 gem 'sidekiq'
+
+gem "httparty", "~> 0.18.1"
+
+gem "multipart-post", "~> 2.1"

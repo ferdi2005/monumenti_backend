@@ -1,5 +1,6 @@
 class GetUserInfoWorker
   include Sidekiq::Worker
+  include AuthenticationHelper
 
   def perform(user)
     return unless user.authorized
@@ -16,6 +17,6 @@ class GetUserInfoWorker
 
     username = JSON.parse(@token.get("/w/api.php?action=query&meta=userinfo&uiprop=*&format=json").body)["query"]["userinfo"]["name"]
 
-    user.update!(username: username)
+    user.update!(username: username, ready: true)
   end
 end

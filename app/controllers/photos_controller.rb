@@ -19,9 +19,14 @@ class PhotosController < ApplicationController
       success = []
       JSON.parse(params[:photos]).each do |key, value|
         if (photo = Photo.find_by(id: key, user: user))
-          photo.update!(title: value[0], description: value[1], date: value[2], confirmed: true)
-          success.push(photo[0])
-          # TODO: Dare il via al job di caricamento effettivo
+          unless value[0].blank? || value[1].blank? || value[2].blank? || !value[2].match?(/\d{2}\/\d{2}\/\d{4}/)
+            photo.update!(title: value[0], description: value[1], date: value[2], confirmed: true)
+            success.push(photo[0])
+            UploadWorker.perform_async(photo)
+          else
+            photo.update!(uploaded: false)
+            errors.push(photo[0])
+          end
         else
           errors.push(photo[0])
         end
