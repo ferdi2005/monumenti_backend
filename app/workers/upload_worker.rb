@@ -64,7 +64,7 @@ class UploadWorker
 == {{int:license-header}} ==
 {{self|cc-by-sa-4.0}}
 
-#{categories.join("\n")}}"
+#{categories.join("\n")}"
       end
 
       req = Net::HTTP::Get.new("/w/api.php?action=query&meta=userinfo&uiprop=groups|rights&format=json")
