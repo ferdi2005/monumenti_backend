@@ -2,8 +2,8 @@ class GetUserInfoWorker
   include Sidekiq::Worker
   include AuthenticationHelper
 
-  def perform(user)
-    return unless User.find_by(id: user.id)
+  def perform(id)
+    return unless (user = User.find_by(id: id))
     return unless user.authorized
     
     if user.testuser

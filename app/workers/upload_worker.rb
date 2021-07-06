@@ -3,10 +3,10 @@ class UploadWorker
   include Sidekiq::Worker
   include AuthenticationHelper
 
-  def perform(photo)
-    return unless User.find_by(id: user.id)
+  def perform(id)
+    return unless (photo = Photo.find_by(id: id))
 
-    unless photo.user.authorized && photo.user.ready && photo.
+    unless photo.user.authorized && photo.user.ready && photo.confirmed
       UplaodWorker.perform_in(1.hour, photo)
       return
     end

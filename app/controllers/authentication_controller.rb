@@ -32,7 +32,7 @@ class AuthenticationController < ApplicationController
       access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
       authinfo = {token: access_token.token, secret: access_token.secret}
       user.update!(authinfo: authinfo, authorized: true)
-      GetUserInfoWorker.perform_async(user)
+      GetUserInfoWorker.perform_async(user.id)
       redirect_to success_path(user: user.id)
     rescue
       redirect_to root_path

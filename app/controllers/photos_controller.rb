@@ -22,7 +22,7 @@ class PhotosController < ApplicationController
           unless value[0].blank? || value[1].blank? || value[2].blank? || !value[2].match?(/\d{2}\/\d{2}\/\d{4}/)
             photo.update!(title: value[0], description: value[1], date: value[2], confirmed: true)
             success.push(photo[0])
-            UploadWorker.perform_async(photo)
+            UploadWorker.perform_async(photo.id)
           else
             photo.update!(uploaded: false)
             errors.push(photo[0])

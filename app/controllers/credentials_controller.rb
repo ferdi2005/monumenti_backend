@@ -28,8 +28,7 @@ class CredentialsController < ApplicationController
   def delete
     user = User.find_by(uuid: params[:uuid], token: params[:token])
     if user
-      user.photos.destroy_all
-      user.destroy
+      user.destroy!
       
       respond_to do |format|
         format.json { render :status => 200, :json => "User deleted." }
