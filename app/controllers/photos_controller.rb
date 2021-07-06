@@ -51,4 +51,12 @@ class PhotosController < ApplicationController
       respond_to { |format| format.json {render json: {"error": "User not found."}}}
     end
   end
+
+  def index
+    if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
+      respond_to { |format| format.json {render json: user.photos } }
+    else
+      respond_to { |format| format.json {render status: 404, json: {"error": "User not found."}}}
+    end
+  end
 end

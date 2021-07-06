@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'auth/failure', to: "authentication#failure"
   get 'deleteuser', to: "credentials#delete"
   post 'photoupload', to: "photos#upload"
+  get 'photolist', to: "photos#index"
   post 'set_title', to: "photos#title"
   post "photocancel", to: "photos#cancel"
   get 'auth/testwiki/callback', to: "authentication#testwiki"
