@@ -4,6 +4,8 @@ class UploadWorker
   include AuthenticationHelper
 
   def perform(photo)
+    return unless User.find_by(id: user.id)
+
     unless photo.user.authorized && photo.user.ready && photo.
       UplaodWorker.perform_in(1.hour, photo)
       return

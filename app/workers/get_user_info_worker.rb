@@ -3,6 +3,7 @@ class GetUserInfoWorker
   include AuthenticationHelper
 
   def perform(user)
+    return unless User.find_by(id: user.id)
     return unless user.authorized
     
     if user.testuser
