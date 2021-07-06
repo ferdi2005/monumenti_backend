@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "auth/mediawiki/callback", to: "authentication#mediawiki"
   get 'success', to: "authentication#success"
   get 'auth/failure', to: "authentication#failure"
+  get 'deleteuser', to: "credentials#delete"
   post 'photoupload', to: "photos#upload"
   post 'set_title', to: "photos#title"
   post "photocancel", to: "photos#cancel"

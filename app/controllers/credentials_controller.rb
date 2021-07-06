@@ -24,4 +24,21 @@ class CredentialsController < ApplicationController
       end
     end
   end
+
+  def delete
+    user = User.find_by(uuid: params[:uuid], token: params[:token])
+    if user
+      user.photos.destroy_all
+      user.destroy
+      
+      respond_to do |format|
+        format.json { render :status => 200, :json => "User deleted." }
+      end
+    else
+      respond_to do |format|
+        format.json { render :status => 404, :json => { error: "User not found."} }
+      end
+    end
+  end
+
 end
