@@ -83,6 +83,9 @@ class UploadWorker
         photo.update!(canonicaltitle: result["upload"]["imageinfo"]["canonicaltitle"], descriptionurl: result["upload"]["imageinfo"]["descriptionurl"], url: result["upload"]["imageinfo"]["url"], sha1: result["upload"]["imageinfo"]["sha1"], uploaded: true)
       else
         photo.update!(uploaded: false)
+        if (error = result["error"].try(:[], "info"))
+          photo.update!(errorinfo: error)
+        end
       end
     rescue
       photo.update!(uploaded: false)
