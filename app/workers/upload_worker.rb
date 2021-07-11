@@ -88,8 +88,8 @@ class UploadWorker
           photo.update!(errorinfo: error)
         end
       end
-    rescue
-      photo.update!(uploaded: false)
+    rescue => e
+      photo.update!(uploaded: false, errorinfo: e)
     end
   end
 end
