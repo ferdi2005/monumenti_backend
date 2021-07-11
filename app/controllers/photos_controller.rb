@@ -6,7 +6,7 @@ class PhotosController < ApplicationController
       if !params[:file].blank? && photo.file.attach(params[:file])
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
-        respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"], timestamp: photo.created_at.strftime("%Y%m%d%H%M")}}}
+        respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"], timestamp: photo.created_at.strftime("%Y%m%d%H%M"), today: Date.today.strftime("%d/%m/%Y")}}}
       else
         respond_to { |format| format.json {render json: {"error": "Photo upload not succeded."}}}
       end
