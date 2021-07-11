@@ -80,7 +80,7 @@ class UploadWorker
 
       result = JSON.parse(res.body)
 
-      if result["upload"]["result"] == "Success"
+      if result.try(:[], "upload").try(:[], "result") == "Success"
         photo.update!(canonicaltitle: result["upload"]["imageinfo"]["canonicaltitle"], descriptionurl: result["upload"]["imageinfo"]["descriptionurl"], url: result["upload"]["imageinfo"]["url"], sha1: result["upload"]["imageinfo"]["sha1"], uploaded: true)
       else
         photo.update!(uploaded: false)
