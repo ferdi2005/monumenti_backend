@@ -37,7 +37,7 @@ class UploadWorker
       info["nonwlmuploadurl"].split("&").find { |a| a.start_with?("categories=") }.gsub("categories=", "").split("%7C").each { |c| categories.push("[[Category:#{c.gsub('+', ' ').gsub('%28', '(').gsub('%29', ')')}]]") }
 
       # Testo della pagina su Commons
-      if photo.created_at.month == 9 # Fotografia partecipante a Wiki Loves Monuments
+      if photo.created_at.month == 9 || photo.user.testuser # Fotografia partecipante a Wiki Loves Monuments
         text = "== {{int:filedesc}} ==
 {{Information
 |description={{it|1=#{photo.description}}}{{Monumento italiano|#{photo.monument}|anno=#{photo.date.year}}}
