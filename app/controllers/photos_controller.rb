@@ -5,8 +5,8 @@ class PhotosController < ApplicationController
       photo = Photo.create(user: user, wlm: wlm, monument: params[:monument])
       if !params[:file].blank? && photo.file.attach(params[:file])
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
-        
-        respond_to { |format| format.json {render json: {"id": photo.id, unit: info["city"], label: info["itemlabel"]}}}
+
+        respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"]}}}
       else
         respond_to { |format| format.json {render json: {"error": "Photo upload not succeded."}}}
       end
