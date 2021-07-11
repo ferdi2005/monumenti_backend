@@ -1,6 +1,6 @@
 class AuthenticationController < ApplicationController
   def success
-    redirect_to root_path and return unless (@user = User.find(params[:user].to_i))
+    @user = User.find_by(id: session[:user_id])
   end
 
   def failure
@@ -33,7 +33,7 @@ class AuthenticationController < ApplicationController
       authinfo = {token: access_token.token, secret: access_token.secret}
       user.update!(authinfo: authinfo, authorized: true)
       GetUserInfoWorker.perform_async(user.id)
-      redirect_to success_path(user: user.id)
+      redirect_to success_path
     rescue
       redirect_to root_path
     end

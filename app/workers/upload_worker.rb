@@ -3,11 +3,12 @@ class UploadWorker
   include Sidekiq::Worker
   include AuthenticationHelper
 
-  def perform(id)
+  def perform(id, times = 0)
     return unless (photo = Photo.find_by(id: id))
 
-    unless photo.user.authorized && photo.user.ready && photo.confirmed
-      UplaodWorker.perform_in(1.hour, photo)
+    unless photo.user.authorized && photo.user.ready && photo.confirmed && times < 4
+      times += 1
+      UplaodWorker.perform_in(2.hours, photo, times)
       return
     end
 
@@ -37,7 +38,7 @@ class UploadWorker
       info["nonwlmuploadurl"].split("&").find { |a| a.start_with?("categories=") }.gsub("categories=", "").split("%7C").each { |c| categories.push("[[Category:#{c.gsub('+', ' ').gsub('%28', '(').gsub('%29', ')')}]]") }
 
       # Testo della pagina su Commons
-      if photo.created_at.month == 9 || photo.user.testuser # Fotografia partecipante a Wiki Loves Monuments
+      if photo.created_at.month == 9 || photo.user.testuser # Fotografia partecipante a Wiki Loves Monuments o utente testuser
         text = "== {{int:filedesc}} ==
 {{Information
 |description={{it|1=#{photo.description}}}{{Monumento italiano|#{photo.monument}|anno=#{photo.date.year}}}
