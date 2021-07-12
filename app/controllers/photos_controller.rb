@@ -57,7 +57,14 @@ class PhotosController < ApplicationController
   def index
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       if params[:order] == "title"
-        response = user.photos.sort_by {|p| p.title}.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
+        response = user.photos.sort_by do |p|
+          if p.title != nil
+            p.title
+          else
+            "nil"
+          end
+        end
+        response = response.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
       else
         response = user.photos.sort_by {|p| p.created_at}.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
       end
