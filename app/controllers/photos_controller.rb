@@ -69,7 +69,7 @@ class PhotosController < ApplicationController
             "nil"
           end
         end
-        response = response.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
+        response = response.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       else
         response = user.photos.sort_by {|p| p.created_at}.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
       end
