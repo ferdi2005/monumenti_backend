@@ -71,7 +71,7 @@ class PhotosController < ApplicationController
         end
         response = response.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       else
-        response = user.photos.sort_by {|p| p.created_at}.as_json.map{|p| p = p.merge(serverurl: Photo.find(p["id"]).serverurl)}
+        response = user.photos.sort_by {|p| p.created_at}.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       end
 
       respond_to { |format| format.json {render json: response } }
