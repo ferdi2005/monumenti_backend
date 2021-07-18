@@ -9,8 +9,6 @@ class AuthenticationController < ApplicationController
 
   def generate_url(oauth_consumer)
     # Crea l'url per iniziare una richiesta oauth
-
-    
     request_token = oauth_consumer.get_request_token(:oauth_callback => "oob")
     session[:token] = request_token.token
     session[:token_secret] = request_token.secret

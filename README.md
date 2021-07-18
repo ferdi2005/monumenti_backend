@@ -1,5 +1,8 @@
 # README
 
+Installare le seguenti dipendenze:
+* sudo apt-get install libexif-dev
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
