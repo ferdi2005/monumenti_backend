@@ -8,7 +8,7 @@ class PhotosController < ApplicationController
 
         # Lettura della data tramite EXIF
         begin
-          data = Exif::Data.new(File.open(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key))).date
+          data = Exif::Data.new(File.open(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key))).date_time
         rescue
           data = nil
         end
