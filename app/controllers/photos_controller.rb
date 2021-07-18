@@ -6,9 +6,20 @@ class PhotosController < ApplicationController
       if !params[:file].blank? && photo.file.attach(params[:file])
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
-        data = Exif::Data.new(File.open(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key))).date_time
+        # Lettura della data tramite EXIF
+        begin
+          data = Exif::Data.new(File.open(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key))).date
+        rescue
+          data = nil
+        end
 
-        respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"], timestamp: photo.created_at.strftime("%Y%m%d%H%M"), today: Date.today.strftime("%d/%m/%Y")}}}
+        if data.nil?
+          data = Date.today
+        else
+          data = Date.parse(data.gsub(/(\d{4}):(\d{2}):(\d{2})/, '\1-\2-\3'))
+        end
+
+        respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"], timestamp: photo.created_at.strftime("%Y%m%d%H%M"), today: data.strftime("%d/%m/%Y")}}}
       else
         respond_to { |format| format.json {render json: {"error": "Photo upload not succeded."}}}
       end
