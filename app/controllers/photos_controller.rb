@@ -6,6 +6,8 @@ class PhotosController < ApplicationController
       if !params[:file].blank? && photo.file.attach(params[:file])
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
+        data = Exif::Data.new(File.open(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key))).date_time
+
         respond_to { |format| format.json {render json: {"id": photo.id, city: info["city"], label: info["itemlabel"], timestamp: photo.created_at.strftime("%Y%m%d%H%M"), today: Date.today.strftime("%d/%m/%Y")}}}
       else
         respond_to { |format| format.json {render json: {"error": "Photo upload not succeded."}}}
@@ -71,7 +73,7 @@ class PhotosController < ApplicationController
         end
         response = response.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       else
-        response = user.photos.sort_by {|p| p.created_at}.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
+        response = user.photos.sort_by {|p| p.created_at}.reverse.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       end
 
       respond_to { |format| format.json {render json: response } }
