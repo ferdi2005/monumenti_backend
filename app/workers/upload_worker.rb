@@ -34,8 +34,8 @@ class UploadWorker
 
         if csrf == nil 
           if csrf_request.try(:[], "error").try(:[], "code") == "mwoauth-invalid-authorization"
-            user.destroy!
-            return
+            photo.update!(uploaded: false, errorinfo: csrf_request.try(:[], "error").try(:[], "info"))
+            next
           else
             photo.update!(uploaded: false, errorinfo: "MediaWiki did not return a valid CSRF token. Please check your login settings.")
             next
