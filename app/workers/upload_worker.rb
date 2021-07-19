@@ -28,9 +28,15 @@ class UploadWorker
         next unless photo.confirmed
 
         next if photo.uploaded
-    
-        csrf = JSON.parse(@token.get("/w/api.php?action=query&meta=tokens&format=json").body)["query"]["tokens"]["csrftoken"]
+        
+        csrf_request = JSON.parse(@token.get("/w/api.php?action=query&meta=tokens&format=json").body)
+        csrf = csrf_request.try(:[], "query").try(:[], "tokens").try(:[], "csrftoken")
 
+        if csrf == nil && csrf_request.try(:[], "error").try(:[], "code") == "mwoauth-invalid-authorization"
+          user.destroy!
+          return
+        end
+        
         # Recupero informazioni sul monumento ritratto
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
