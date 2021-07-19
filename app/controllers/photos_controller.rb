@@ -3,6 +3,9 @@ class PhotosController < ApplicationController
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       Date.today.month == 9 ? wlm = true : wlm = false
       photo = Photo.create(user: user, wlm: wlm, monument: params[:monument])
+
+      CheckPhotoStatusWorker.perform_in(2.hours, photo.id)
+      
       if !params[:file].blank? && photo.file.attach(params[:file])
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
