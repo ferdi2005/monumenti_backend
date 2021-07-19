@@ -32,11 +32,16 @@ class UploadWorker
         csrf_request = JSON.parse(@token.get("/w/api.php?action=query&meta=tokens&format=json").body)
         csrf = csrf_request.try(:[], "query").try(:[], "tokens").try(:[], "csrftoken")
 
-        if csrf == nil && csrf_request.try(:[], "error").try(:[], "code") == "mwoauth-invalid-authorization"
-          user.destroy!
-          return
+        if csrf == nil 
+          if csrf_request.try(:[], "error").try(:[], "code") == "mwoauth-invalid-authorization"
+            user.destroy!
+            return
+          else
+            photo.update!(uploaded: false, errorinfo: "MediaWiki did not return a valid CSRF token. Please check your login settings.")
+            next
+          end
         end
-        
+
         # Recupero informazioni sul monumento ritratto
         info = HTTParty.get("https://cerca.wikilovesmonuments.it/show_by_wikidata.json?item=#{photo.monument}").to_h
 
