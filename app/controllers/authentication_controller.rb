@@ -1,6 +1,7 @@
 class AuthenticationController < ApplicationController
   def success
     @user = User.find_by(id: session[:user_id])
+    @users = User.where(username: @user.username)
   end
 
   def failure
@@ -31,8 +32,21 @@ class AuthenticationController < ApplicationController
       request_token = OAuth::RequestToken.from_hash(oauth_consumer, hash)
       access_token = request_token.get_access_token(oauth_verifier: params[:oauth_verifier])
       authinfo = {token: access_token.token, secret: access_token.secret}
-      user.update!(authinfo: authinfo, authorized: true)
-      GetUserInfoWorker.perform_async(user.id)
+
+
+      @token = OAuth::AccessToken.new(oauth_consumer)
+      @token.token = user.authinfo[:token]
+      @token.secret = user.authinfo[:secret]
+
+      username = JSON.parse(@token.get("/w/api.php?action=query&meta=userinfo&uiprop=*&format=json").body)["query"]["userinfo"]["name"]
+
+      user.update!(username: username, authinfo: authinfo, authorized: true, ready: true)
+
+      # Consente gli utenti con più login.      
+      User.where(username: username).each do |other_user|
+        other_user.update!(authinfo: authinfo)
+      end
+
       redirect_to success_path
     rescue
       redirect_to root_path

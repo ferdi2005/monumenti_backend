@@ -4,3 +4,10 @@
 <% if @user.try(:testuser) %>
     <h2 class="subtitle"><b>Attenzione!</b> Hai effettuato la registrazione come utente di test. Le tue foto non saranno realmente caricate su Wikimedia Commons bensì su una <%= link_to "wiki di prova", "https://testwlm.ferdinando.me" %>.</h2>
 <% end %>
+
+Al momento, stai utilizzando <%= @users.count %>. Essi sono denominati:
+<ul>
+<% @users.each do |u| %>
+    <li><%= u.device_name %></li>
+<% end %>
+</ul>
