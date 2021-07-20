@@ -5,9 +5,11 @@
     <h2 class="subtitle"><b>Attenzione!</b> Hai effettuato la registrazione come utente di test. Le tue foto non saranno realmente caricate su Wikimedia Commons bensì su una <%= link_to "wiki di prova", "https://testwlm.ferdinando.me" %>.</h2>
 <% end %>
 
-Al momento, stai utilizzando <%= @users.count %>. Essi sono denominati:
+<div class="content">
+Al momento, stai utilizzando <%= @users.count %> dispositivi. Essi sono denominati:
 <ul>
 <% @users.each do |u| %>
-    <li><%= u.device_name %></li>
+    <li><%= u.device_name %><%= "Senza nome" if u.device_name.blank? %></li>
 <% end %>
 </ul>
+</div>

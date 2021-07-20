@@ -35,9 +35,9 @@ class AuthenticationController < ApplicationController
 
 
       @token = OAuth::AccessToken.new(oauth_consumer)
-      @token.token = user.authinfo[:token]
-      @token.secret = user.authinfo[:secret]
-
+      @token.token = authinfo[:token]
+      @token.secret = authinfo[:secret]
+      
       username = JSON.parse(@token.get("/w/api.php?action=query&meta=userinfo&uiprop=*&format=json").body)["query"]["userinfo"]["name"]
 
       user.update!(username: username, authinfo: authinfo, authorized: true, ready: true)
@@ -48,7 +48,8 @@ class AuthenticationController < ApplicationController
       end
 
       redirect_to success_path
-    rescue
+    rescue => e
+      logger.error e
       redirect_to root_path
     end
   end
