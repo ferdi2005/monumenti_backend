@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   post 'set_title', to: "photos#title"
   post "photocancel", to: "photos#cancel"
   get 'auth/testwiki/callback', to: "authentication#testwiki"
+  get 'faq', to: "pages#faq"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
