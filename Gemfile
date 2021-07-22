@@ -68,5 +68,3 @@ gem "httparty", "~> 0.18.1"
 gem "multipart-post", "~> 2.1"
 
 gem "exif", "~> 2.2"
-
-gem "jemalloc", "~> 1.0"
