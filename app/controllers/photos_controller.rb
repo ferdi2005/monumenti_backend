@@ -90,7 +90,13 @@ class PhotosController < ApplicationController
         response = user.photos.sort_by {|p| p.created_at}.reverse.as_json.map{|p| p = p.merge({serverurl: Photo.find(p["id"]).serverurl, item: Photo.find(p["id"]).monument})}
       end
 
-      respond_to { |format| format.json {render json: response } }
+      if user.testuser
+        url = "https://ferdi.host/wiki/Special:ListFiles/#{user.username}"
+      else
+        url = "https://commons.wikimedia.org/wiki/Special:ListFiles/#{user.username}"
+      end
+
+      respond_to { |format| format.json {render json: [response, url] } }
     else
       respond_to { |format| format.json {render status: 404, json: {"error": "User not found."}}}
     end
