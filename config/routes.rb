@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'analytics/crash'
+  get 'analytics/version'
   root 'pages#uhm'
   get "start_login", to: 'authentication#start'
   post 'set_credentials', to: 'credentials#set'
