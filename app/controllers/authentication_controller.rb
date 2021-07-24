@@ -21,8 +21,11 @@ class AuthenticationController < ApplicationController
   def start
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       session[:user_id] = user.id
-      @mediawiki_url = generate_url($oauth_consumer, "mediawiki")
-      @test_url = generate_url($test_oauth_consumer, "testwiki")
+      if params[:wiki] == "wikitest"
+        redirect_to generate_url($test_oauth_consumer, "testwiki")
+      else
+        redirect_to generate_url($oauth_consumer, "mediawiki")
+      end
     else
       redirect_to root_path and return
     end
