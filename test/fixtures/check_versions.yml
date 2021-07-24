@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  uuid: MyString
+  old_version: MyString
+  app_version: MyString
+  updated: 
+
+two:
+  uuid: MyString
+  old_version: MyString
+  app_version: MyString
+  updated: 

@@ -1,0 +1,2 @@
+class CheckVersion < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_07_221928) do
+ActiveRecord::Schema.define(version: 2021_07_24_123913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -42,6 +42,30 @@ ActiveRecord::Schema.define(version: 2021_07_07_221928) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "check_versions", force: :cascade do |t|
+    t.string "uuid"
+    t.string "old_version"
+    t.string "app_version"
+    t.string "device_name"
+    t.string "os_version"
+    t.string "os"
+    t.string "model"
+    t.boolean "updated"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "crashes", force: :cascade do |t|
+    t.string "uuid"
+    t.string "data"
+    t.string "device_name"
+    t.string "os_version"
+    t.string "os"
+    t.string "model"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "photos", force: :cascade do |t|
