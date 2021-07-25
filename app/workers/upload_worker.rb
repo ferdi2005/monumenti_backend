@@ -90,6 +90,7 @@ class UploadWorker
         req['Authorization'] = oauth_consumer.sign!(req, @token)
         meq = Net::HTTP.new(@token.consumer.uri.host, @token.consumer.uri.port)
         meq.use_ssl = true
+        meq.read_timeout = 1800 
         res = meq.start do |http|
           http.request(req)
         end
