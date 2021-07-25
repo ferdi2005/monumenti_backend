@@ -85,7 +85,7 @@ class UploadWorker
         end
 
         # Faccio la richiesta per il caricamento della foto
-        req = Net::HTTP::Post::Multipart.new("/w/api.php", action: :upload, file: UploadIO.new(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key), photo.file.blob.content_type, photo.file.blob.filename.to_s), filename: photo.title, text: text, async: true, ignorewarnings: true, token: csrf, format: :json)
+        req = Net::HTTP::Post::Multipart.new("/w/api.php", action: :upload, file: UploadIO.new(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key), photo.file.blob.content_type, photo.file.blob.filename.to_s), filename: photo.title, text: text, ignorewarnings: true, token: csrf, format: :json)
         # req['Authorization'] = @token.sign!(req)
         req['Authorization'] = oauth_consumer.sign!(req, @token)
         meq = Net::HTTP.new(@token.consumer.uri.host, @token.consumer.uri.port)
