@@ -40,10 +40,12 @@ class AuthenticationController < ApplicationController
       
       username = JSON.parse(access_token.get("/w/api.php?action=query&meta=userinfo&uiprop=*&format=json").body)["query"]["userinfo"]["name"]
 
-      user.update!(username: username, authinfo: authinfo, authorized: true, ready: true)
+      sitename == "testwiki" ? testuser = true : testuser = false
+
+      user.update!(username: username, authinfo: authinfo, authorized: true, ready: true, testuser: testuser)
 
       # Consente gli utenti con più login.      
-      User.where(username: username).each do |other_user|
+      User.where(username: username, testuser: testuser).each do |other_user|
         other_user.update!(authinfo: authinfo)
       end
 
@@ -66,7 +68,6 @@ class AuthenticationController < ApplicationController
   def testwiki
     user = User.find(session[:user_id])
     if user
-      user.update!(testuser: true)
       process_data($test_oauth_consumer, user, "testwiki")
     else
       redirect_to root_path and return
