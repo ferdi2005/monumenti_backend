@@ -2,7 +2,7 @@ class AuthenticationController < ApplicationController
   def success
     @user = User.find_by(id: session[:user_id])
     @users = User.where(username: @user.username)
-    @language = params[:language]
+    @language = session[:language]
   end
 
   def failure
