@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   def uhm
+    @language = session[:language]
   end
   
   def faq
