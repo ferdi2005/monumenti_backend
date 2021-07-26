@@ -2,6 +2,7 @@ class AuthenticationController < ApplicationController
   def success
     @user = User.find_by(id: session[:user_id])
     @users = User.where(username: @user.username)
+    @language = params[:language]
   end
 
   def failure
@@ -21,6 +22,7 @@ class AuthenticationController < ApplicationController
   def start
     if (user = User.find_by(uuid: params[:uuid], token: params[:token]))
       session[:user_id] = user.id
+      session[:language] = params[:language]
       if params[:wiki] == "wikitest"
         redirect_to generate_url($test_oauth_consumer, "testwiki")
       else
