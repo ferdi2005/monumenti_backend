@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_095412) do
+ActiveRecord::Schema.define(version: 2021_08_02_100302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -94,7 +94,6 @@ ActiveRecord::Schema.define(version: 2021_08_02_095412) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "authorized", default: false
-    t.hstore "authinfo"
     t.boolean "testuser", default: false
     t.string "username"
     t.boolean "ready", default: false
