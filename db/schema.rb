@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_02_100302) do
+ActiveRecord::Schema.define(version: 2021_07_24_123913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -97,7 +97,6 @@ ActiveRecord::Schema.define(version: 2021_08_02_100302) do
     t.boolean "testuser", default: false
     t.string "username"
     t.boolean "ready", default: false
-    t.text "authinfo_ciphertext"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
