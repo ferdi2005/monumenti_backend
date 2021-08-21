@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2021_07_24_123913) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "authorized", default: false
+    t.hstore "authinfo"
     t.boolean "testuser", default: false
     t.string "username"
     t.boolean "ready", default: false
