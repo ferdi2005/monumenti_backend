@@ -12,3 +12,4 @@ class CreateCrashes < ActiveRecord::Migration[6.1]
     end
   end
 end
+insert into schema_migrations (version) values ('20210724123913');
