@@ -57,7 +57,7 @@ class UploadWorker
         if photo.created_at.month == 9 || user.testuser # Fotografia partecipante a Wiki Loves Monuments o utente testuser
           text = "== {{int:filedesc}} ==
 {{Information
-|description={{it|1=#{photo.description}}}{{Monumento italiano|#{photo.monument}|anno=#{photo.date.year}}}
+|description={{it|1=#{photo.description}}}{{Monumento italiano|#{info["wlmid"]}|anno=#{photo.date.year}}}
 |date=#{photo.date.strftime}
 |source={{own}}
 |author=[[User:#{user.username}|#{user.username}]]
