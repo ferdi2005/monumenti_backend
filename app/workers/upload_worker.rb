@@ -65,7 +65,7 @@ class UploadWorker
 
 == {{int:license-header}} ==
 {{self|cc-by-sa-4.0}}
-        
+
 {{Wiki Loves Monuments #{photo.date.year}|it}}
 
 #{wlm_categories.join("\n")}"
