@@ -40,7 +40,7 @@ class PhotosController < ApplicationController
       JSON.parse(params[:photos]).each do |key, value|
         if (photo = Photo.find_by(id: key, user: user))
           unless value[0].blank? || value[1].blank? || value[2].blank? || !value[2].match?(/\d{2}\/\d{2}\/\d{4}/)
-            photo.update!(title: value[0], description: value[1], date: value[2], confirmed: true)
+            photo.update!(title: value[0].strip, description: value[1].strip, date: value[2].strip, confirmed: true)
             success.push(photo[0])
             # Prepara per l'upload
             success_ids.push(photo.id)

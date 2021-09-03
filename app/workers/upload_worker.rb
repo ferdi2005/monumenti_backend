@@ -20,7 +20,7 @@ class UploadWorker
     @token.secret = user.authinfo["secret"]
     @token.token = user.authinfo["token"]
     
-    ids.each do |id|  
+    ids.each do |id|
       begin
         # Criteri di esclusione (il job non dovrebbe neanche partire)
         next unless (photo = Photo.find_by(id: id))
@@ -28,7 +28,16 @@ class UploadWorker
         next unless photo.confirmed
 
         next if photo.uploaded
+
+        title = "File:#{photo.title}.#{photo.file.blob.filename.extension}" # Genero titolo della foto
         
+        check_existence = HTTParty.get("https://commons.wikimedia.org/w/api.php", query: {action: :query, titles: title, format: :json}).to_h
+
+        if check_existence.try(:[], "query").try(:[], "pages").try(:[], "-1").nil?
+          photo.update!(uploaded: false, errorinfo: "Un'immagine con lo stesso titolo è già presente.")
+          next
+        end
+
         csrf_request = JSON.parse(@token.get("/w/api.php?action=query&meta=tokens&format=json").body)
         csrf = csrf_request.try(:[], "query").try(:[], "tokens").try(:[], "csrftoken")
 
@@ -85,7 +94,7 @@ class UploadWorker
         end
 
         # Faccio la richiesta per il caricamento della foto
-        req = Net::HTTP::Post::Multipart.new("/w/api.php", action: :upload, file: UploadIO.new(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key), photo.file.blob.content_type, photo.file.blob.filename.to_s), filename: photo.title, text: text, ignorewarnings: true, token: csrf, format: :json)
+        req = Net::HTTP::Post::Multipart.new("/w/api.php", action: :upload, file: UploadIO.new(ActiveStorage::Blob.service.send(:path_for, photo.file.blob.key), photo.file.blob.content_type, photo.file.blob.filename.to_s), filename: title, text: text, ignorewarnings: true, token: csrf, format: :json)
         # req['Authorization'] = @token.sign!(req)
         req['Authorization'] = oauth_consumer.sign!(req, @token)
         meq = Net::HTTP.new(@token.consumer.uri.host, @token.consumer.uri.port)
