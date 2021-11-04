@@ -1,5 +1,5 @@
 require 'mediawiki_api'
-namespace :wiki do
+namespace :db do
     task :amend_date do
         commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
         commons.log_in(ENV["USERNAME"], ENV["PASSWORD"])
