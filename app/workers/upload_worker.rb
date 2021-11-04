@@ -66,7 +66,7 @@ class UploadWorker
         if photo.created_at.month == 9 || user.testuser # Fotografia partecipante a Wiki Loves Monuments o utente testuser
           text = "== {{int:filedesc}} ==
 {{Information
-|description={{it|1=#{photo.description}}}{{Monumento italiano|#{info["wlmid"]}|anno=#{photo.date.year}}}{{Load via app WLM.it|year=#{photo.date.year}}}
+|description={{it|1=#{photo.description}}}{{Monumento italiano|#{info["wlmid"]}|anno=#{photo.created_at.year}}}{{Load via app WLM.it|year=#{photo.o.year}}}
 |date=#{photo.date.strftime}
 |source={{own}}
 |author=[[User:#{user.username}|#{user.username}]]
@@ -75,13 +75,13 @@ class UploadWorker
 == {{int:license-header}} ==
 {{self|cc-by-sa-4.0}}
 
-{{Wiki Loves Monuments #{photo.date.year}|it}}
+{{Wiki Loves Monuments #{photo.created_at.year}|it}}
 
 #{wlm_categories.join("\n")}"
         else
           text = "== {{int:filedesc}} ==
 {{Information
-|description={{it|1=#{photo.description}}}{{Load via app WLM.it|year=#{photo.date.year}}}
+|description={{it|1=#{photo.description}}}{{Load via app WLM.it|year=#{photo.created_at.year}}}
 |date=#{photo.date.strftime}
 |source={{own}}
 |author=[[User:#{user.username}|#{user.username}]]
