@@ -26,8 +26,8 @@ namespace :db do
             next if p.descriptionurl.nil?
             puts "#{p.title} - Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
-            text = String.new(wikitext.data["pages"].first.try(:[], 1).try(:[], "revisions").try(:[], 0).try(:[],"slots").try(:[], "main").try(:[],"*"))
             next if wikitext.data["pages"].first.try(:[], 1).try(:[], "revisions").try(:[], 0).try(:[],"slots").try(:[], "main").try(:[],"*").nil?
+            text = String.new(wikitext.data["pages"].first.try(:[], 1).try(:[], "revisions").try(:[], 0).try(:[],"slots").try(:[], "main").try(:[],"*"))
             unless text.match?(/{{Load via app WLM\.it\|year=2021}}/i)
                 text.gsub!(/\|description=(.+)/i, '|description=\1{{Load via app WLM.it|year=2021}}')
                 commons.edit(title: CGI.unescape(p.descriptionurl.split("/")[4]), text: text, summary: "Adding WLM template") unless text == wikitext.data["pages"].first[1]["revisions"][0]["slots"]["main"]["*"]
