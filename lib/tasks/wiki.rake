@@ -1,9 +1,10 @@
 require 'mediawiki_api'
 namespace :wiki do
     task :amend_date do
-        commons = MediawikiApi::Client.new("https://commons.wikimedia.it/w/api.php")
+        commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
         commons.log_in(ENV["USERNAME"], ENV["PASSWORD"])
         Photo.where(date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")) do |p|
+            puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
             wixitext.gsub!(/{{Monumento italiano\|([\w\d]+)\|anno=20[01][023456789]}}/i, "{{Monumento italiano|\1|anno=2021}}")
             wixitext.gsub!(/{{Wiki Loves Monuments 20[01][023456789]\|it}}/i, "{{Wiki Loves Monuments 2021|it}}")
@@ -16,6 +17,7 @@ namespace :wiki do
 
     task :add_banner do
         Photo.where(created_at: Date.parse("1 aug 2021")..Date.parse("5 sep 2021")).each do |p|
+            puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
             unless p.match?(/{{Load via app WLM\.it\|year=2021}}/i)
                 wikitext.gsub!(/\|description=(.+)/i, "|description=\1{{Load via app WLM.it|year=2021}}")
