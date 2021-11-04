@@ -16,6 +16,7 @@ namespace :wiki do
     end
 
     task :add_banner do
+        commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
         Photo.where(created_at: Date.parse("1 aug 2021")..Date.parse("5 sep 2021")).each do |p|
             puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
