@@ -70,3 +70,5 @@ gem "multipart-post", "~> 2.1"
 gem "exif", "~> 2.2"
 
 gem "semantic", "~> 1.6"
+
+gem "mediawiki_api", "~> 0.7.1", require: false
