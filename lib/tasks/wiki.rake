@@ -3,7 +3,7 @@ namespace :db do
     task :amend_date => :environment do
         commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
         commons.log_in(ENV["USERNAME"], ENV["PASSWORD"])
-        Photo.where(date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")).each do |p|
+        Photo.where(uploaded: true, date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")).each do |p|
             puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
             text = String.new(wikitext.data["pages"].first[1]["revisions"][0]["slots"]["main"]["*"])
@@ -19,7 +19,7 @@ namespace :db do
 
     task :add_banner => :environment do
         commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
-        Photo.where(created_at: Date.parse("1 aug 2021")..Date.parse("5 sep 2021")).each do |p|
+        Photo.where(uploaded: true, created_at: Date.parse("1 aug 2021")..Date.parse("5 sep 2021")).each do |p|
             puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
             text = String.new(wikitext.data["pages"].first[1]["revisions"][0]["slots"]["main"]["*"])
