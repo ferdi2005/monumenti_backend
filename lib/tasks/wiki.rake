@@ -6,8 +6,8 @@ namespace :db do
         Photo.where(date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")).each do |p|
             puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
-            wixitext.gsub!(/{{Monumento italiano\|([\w\d]+)\|anno=20[01][023456789]}}/i, "{{Monumento italiano|\1|anno=2021}}")
-            wixitext.gsub!(/{{Wiki Loves Monuments 20[01][023456789]\|it}}/i, "{{Wiki Loves Monuments 2021|it}}")
+            wikitext.gsub!(/{{Monumento italiano\|([\w\d]+)\|anno=20[01][023456789]}}/i, "{{Monumento italiano|\1|anno=2021}}")
+            wikitext.gsub!(/{{Wiki Loves Monuments 20[01][023456789]\|it}}/i, "{{Wiki Loves Monuments 2021|it}}")
             wikitext.gsub!(/{{Load via app WLM\.it\|year=20[01][023456789]}}/i, "{{Load via app WLM.it|year=2021}}")
 
             commons.edit(title: p.descriptionurl.split("/")[4], text: wikitext, summary: "Fixing WLM date")
