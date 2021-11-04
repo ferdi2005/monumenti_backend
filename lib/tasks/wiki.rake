@@ -3,7 +3,7 @@ namespace :db do
     task :amend_date => :environment do
         commons = MediawikiApi::Client.new("https://commons.wikimedia.org/w/api.php")
         commons.log_in(ENV["USERNAME"], ENV["PASSWORD"])
-        Photo.where(date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")) do |p|
+        Photo.where(date: Date.parse("1 jan 2000")..Date.parse("31 dec 2020")).each do |p|
             puts "Doing #{p.descriptionurl.split("/")[4]}"
             wikitext = commons.query prop: :revisions, titles: p.descriptionurl.split("/")[4], rvprop: :content, rvslots: "*"
             wixitext.gsub!(/{{Monumento italiano\|([\w\d]+)\|anno=20[01][023456789]}}/i, "{{Monumento italiano|\1|anno=2021}}")
@@ -11,8 +11,8 @@ namespace :db do
             wikitext.gsub!(/{{Load via app WLM\.it\|year=20[01][023456789]}}/i, "{{Load via app WLM.it|year=2021}}")
 
             commons.edit(title: p.descriptionurl.split("/")[4], text: wikitext, summary: "Fixing WLM date")
+            sleep(30)
         end
-        sleep(30)
     end
 
     task :add_banner => :environment do
@@ -24,7 +24,7 @@ namespace :db do
                 wikitext.gsub!(/\|description=(.+)/i, "|description=\1{{Load via app WLM.it|year=2021}}")
                 commons.edit(title: p.descriptionurl.split("/")[4], text: wikitext, summary: "Adding WLM template")
             end
+            sleep(30)
         end
-        sleep(30)
     end
 end
