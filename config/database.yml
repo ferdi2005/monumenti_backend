@@ -81,6 +81,7 @@ test:
 #
 production:
   <<: *default
+  host: localhost
   database: monumenti_backend_production
   username: monumenti_backend
   password: <%= ENV['MONUMENTI_BACKEND_DATABASE_PASSWORD'] %>
