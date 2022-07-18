@@ -82,4 +82,4 @@ gem "semantic", "~> 1.6"
 
 gem "mediawiki_api", "~> 0.7.1", require: false
 
-gem "net-smtp", "~> 0.3.1"
+gem "net-smtp", require: false
