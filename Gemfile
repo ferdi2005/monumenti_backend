@@ -85,3 +85,6 @@ gem "mediawiki_api", "~> 0.7.1", require: false
 gem "net-smtp", require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
+
+gem "sentry-ruby"
+gem "sentry-rails"

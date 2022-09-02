@@ -258,6 +258,11 @@ GEM
       websocket (~> 1.0)
     semantic (1.6.1)
     semantic_range (3.0.0)
+    sentry-rails (5.4.2)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.4.2)
+    sentry-ruby (5.4.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     sidekiq (6.5.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -343,6 +348,8 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   semantic (~> 1.6)
+  sentry-rails
+  sentry-ruby
   sidekiq
   spring
   turbolinks (~> 5)
