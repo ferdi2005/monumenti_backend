@@ -29,6 +29,11 @@ class UploadWorker
 
         next if photo.uploaded
 
+        if ActiveStorage::Blob.where(checksum: photo.file.checksum).count > 1
+          photo.update!(uploaded: false, errorinfo: "File duplicato")
+          next
+        end
+
         title = "File:#{photo.title}.#{photo.file.blob.filename.extension}" # Genero titolo della foto
         
         check_existence = HTTParty.get("https://commons.wikimedia.org/w/api.php", query: {action: :query, titles: title, format: :json}).to_h
