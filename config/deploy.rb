@@ -11,6 +11,7 @@ set :user, 'deploy'
 set :puma_threads,    [4, 16]
 set :puma_workers,    0
 set :branch, "main"
+set :puma_user, fetch(:user)
 
 set :pty,             true
 set :use_sudo,        false
