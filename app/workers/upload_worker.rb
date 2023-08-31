@@ -9,6 +9,11 @@ class UploadWorker
 
     return unless user.authorized && user.ready
 
+    # CHIUSURA DELL'APPLICAZIONE
+    photo.update!(uploaded: false, errorinfo: "ATTENZIONE! La presente applicazione è stata dismessa. Utilizzare https://app.wikilovesmonuments.it. L'immagine non è stata caricata su Wikimedia Commons.")
+
+    return
+
     # Se l'utente è un testuser, usa la wiki di test
     if user.testuser
       oauth_consumer = $test_oauth_consumer
@@ -28,11 +33,6 @@ class UploadWorker
         next unless photo.confirmed
 
         next if photo.uploaded
-
-        if ActiveStorage::Blob.where(checksum: photo.file.checksum).count > 1
-          photo.update!(uploaded: false, errorinfo: "File duplicato")
-          next
-        end
 
         title = "File:#{photo.title}.#{photo.file.blob.filename.extension}" # Genero titolo della foto
         
@@ -106,7 +106,8 @@ class UploadWorker
         meq.use_ssl = true
         meq.read_timeout = 18000 
         res = meq.start do |http|
-          http.request(req)
+          # APPLICAZIONE CHIUSA!
+          # http.request(req)
         end
 
         result = JSON.parse(res.body)
